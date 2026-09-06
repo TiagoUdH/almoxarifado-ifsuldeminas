@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
+import SearchInput from '../components/SearchInput';
+import ItemCard from '../components/ItemCard';
+import { getStatusEstoque } from '../utils/estoque';
 
 const itensMock = [
   { id: '1', nome: 'Papel A4', categoria: 'Papelaria', quantidade: 150, unidade: 'resmas', minimo: 20 },
@@ -21,49 +24,24 @@ export default function ItensScreen({ navigation }) {
     item.categoria.toLowerCase().includes(busca.toLowerCase())
   );
 
-  const getStatusEstoque = (quantidade, minimo) => {
-    if (quantidade <= minimo) return { cor: '#ff4444', texto: 'Baixo' };
-    if (quantidade <= minimo * 2) return { cor: '#ffaa00', texto: 'Atenção' };
-    return { cor: '#00C851', texto: 'Normal' };
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.buscaContainer}>
-        <TextInput
-          style={styles.buscaInput}
-          placeholder="Buscar item ou categoria..."
-          value={busca}
-          onChangeText={setBusca}
-        />
-      </View>
+      <SearchInput placeholder="Buscar item ou categoria..." value={busca} onChangeText={setBusca} />
 
       <FlatList
         data={itensFiltrados}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item }) => {
-          const status = getStatusEstoque(item.quantidade, item.minimo);
-          return (
-            <TouchableOpacity
-              style={styles.itemCard}
-              onPress={() => navigation.navigate('ItemDetalhe', { item })}
-            >
-              <View style={styles.itemInfo}>
-                <Text style={styles.itemNome}>{item.nome}</Text>
-                <Text style={styles.itemCategoria}>{item.categoria}</Text>
-              </View>
-              <View style={styles.itemEstoque}>
-                <Text style={styles.itemQuantidade}>
-                  {item.quantidade} {item.unidade}
-                </Text>
-                <View style={[styles.statusBadge, { backgroundColor: status.cor }]}>
-                  <Text style={styles.statusText}>{status.texto}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
+        renderItem={({ item }) => (
+          <ItemCard
+            nome={item.nome}
+            categoria={item.categoria}
+            quantidade={item.quantidade}
+            unidade={item.unidade}
+            status={getStatusEstoque(item.quantidade, item.minimo, true)}
+            onPress={() => navigation.navigate('ItemDetalhe', { item })}
+          />
+        )}
       />
     </View>
   );
@@ -71,15 +49,5 @@ export default function ItensScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
-  buscaContainer: { padding: 10, backgroundColor: '#fff' },
-  buscaInput: { backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, fontSize: 14 },
   listContent: { padding: 10 },
-  itemCard: { backgroundColor: '#fff', padding: 15, marginBottom: 8, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', elevation: 2 },
-  itemInfo: { flex: 1 },
-  itemNome: { fontSize: 16, fontWeight: 'bold', color: '#333' },
-  itemCategoria: { fontSize: 12, color: '#666', marginTop: 4 },
-  itemEstoque: { alignItems: 'flex-end' },
-  itemQuantidade: { fontSize: 14, fontWeight: 'bold', color: '#333' },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10, marginTop: 5 },
-  statusText: { color: '#fff', fontSize: 10, fontWeight: 'bold' },
 });

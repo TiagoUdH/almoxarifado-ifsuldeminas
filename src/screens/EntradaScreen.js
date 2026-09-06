@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import FormField from '../components/FormField';
+import Button from '../components/Button';
 
 export default function EntradaScreen() {
   const [item, setItem] = useState('');
@@ -26,82 +28,62 @@ export default function EntradaScreen() {
       <View style={styles.form}>
         <Text style={styles.title}>Registrar Entrada de Material</Text>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Item / Material</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Ex: Papel A4, Toner HP..."
-            value={item}
-            onChangeText={setItem}
-          />
-        </View>
+        <FormField
+          label="Item / Material"
+          placeholder="Ex: Papel A4, Toner HP..."
+          value={item}
+          onChangeText={setItem}
+        />
 
         <View style={styles.row}>
-          <View style={[styles.field, { flex: 1 }]}>
-            <Text style={styles.label}>Quantidade</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="0"
-              keyboardType="numeric"
-              value={quantidade}
-              onChangeText={setQuantidade}
-            />
-          </View>
-          <View style={[styles.field, { flex: 1, marginLeft: 10 }]}>
-            <Text style={styles.label}>Unidade</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="un, kg, L..."
-              value={unidade}
-              onChangeText={setUnidade}
-            />
-          </View>
-        </View>
-
-        <View style={styles.field}>
-          <Text style={styles.label}>Fornecedor</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome do fornecedor"
-            value={fornecedor}
-            onChangeText={setFornecedor}
+          <FormField
+            label="Quantidade"
+            style={{ flex: 1 }}
+            placeholder="0"
+            keyboardType="numeric"
+            value={quantidade}
+            onChangeText={setQuantidade}
+          />
+          <FormField
+            label="Unidade"
+            style={{ flex: 1, marginLeft: 10 }}
+            placeholder="un, kg, L..."
+            value={unidade}
+            onChangeText={setUnidade}
           />
         </View>
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Nota Fiscal</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Número da NF"
-            value={notaFiscal}
-            onChangeText={setNotaFiscal}
-          />
-        </View>
+        <FormField
+          label="Fornecedor"
+          placeholder="Nome do fornecedor"
+          value={fornecedor}
+          onChangeText={setFornecedor}
+        />
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Data de Entrada</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="DD/MM/AAAA"
-            value={dataEntrada}
-            onChangeText={setDataEntrada}
-          />
-        </View>
+        <FormField
+          label="Nota Fiscal"
+          placeholder="Número da NF"
+          value={notaFiscal}
+          onChangeText={setNotaFiscal}
+        />
 
-        <View style={styles.field}>
-          <Text style={styles.label}>Observações</Text>
-          <TextInput
-            style={[styles.input, { height: 80 }]}
-            placeholder="Observações adicionais..."
-            multiline
-            value={observacoes}
-            onChangeText={setObservacoes}
-          />
-        </View>
+        <FormField
+          label="Data de Entrada"
+          placeholder="DD/MM/AAAA"
+          value={dataEntrada}
+          onChangeText={setDataEntrada}
+        />
 
-        <TouchableOpacity style={styles.button} onPress={handleRegistrar}>
-          <Text style={styles.buttonText}>Registrar Entrada</Text>
-        </TouchableOpacity>
+        <FormField
+          label="Observações"
+          inputStyle={{ height: 80 }}
+          placeholder="Observações adicionais..."
+          multiline
+          value={observacoes}
+          onChangeText={setObservacoes}
+        />
+
+        <Button label="Registrar Entrada" onPress={handleRegistrar} style={{ marginTop: 10 }} />
       </View>
     </ScrollView>
   );
@@ -111,10 +93,5 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   form: { padding: 20 },
   title: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 20, textAlign: 'center' },
-  field: { marginBottom: 15 },
-  label: { fontSize: 14, color: '#555', marginBottom: 5, fontWeight: '600' },
-  input: { backgroundColor: '#fff', padding: 12, borderRadius: 8, fontSize: 14, borderWidth: 1, borderColor: '#ddd' },
   row: { flexDirection: 'row' },
-  button: { backgroundColor: '#1E90FF', padding: 15, borderRadius: 8, alignItems: 'center', marginTop: 10 },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });
